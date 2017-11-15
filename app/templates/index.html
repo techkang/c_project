@@ -22,11 +22,7 @@
     {{ wtf.quick_form(form) }}
 </div>-->
 <div class="cl-md-4">
-<form method="post" enctype="multipart/form-data">
-    {{form.hidden_tag()}}
-    {{form.project}}
-    <input type="submit" value="Submit">
-</form>
+    {{wtf.quick_form(form,enctype="multipart/form-data")}}
 </div>
 {% else %}
 <h3>欢迎提交计算机程序设计A作业</h3>
