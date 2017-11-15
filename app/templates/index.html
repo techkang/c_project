@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}计算机程序设计A{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>你好, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}{% endif %}!</h1>
+</div>
+{% if current_user.is_authenticated %}
+<h3>Notice:</h3>
+<ul>
+    <li>1.请在11月28日23:59分前提交第一次大作业的实验报告（pdf+txt）。</li>
+    <li>2.目前只接受zip格式的文件！</li>
+	<li>3.可以重复提交，重复提交会覆盖之前的作业。</li>
+	<li>4.可以多人合作，多人合作只需提交一份实验报告，注明各人工作。</li>
+	<li>5.vs及其他软件的安装及使用请点击<a href="ustc.tk/c">此处</a></li>
+	<li>6.<a href="home.ustc.edu.cn/~ksc">课程主页</a></li>
+</ul>
+<!--<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>-->
+<div class="cl-md-4">
+<form method="post" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+    {{form.project}}
+    <input type="submit" value="Submit">
+</form>
+</div>
+{% else %}
+<h3>欢迎提交计算机程序设计A作业</h3>
+{% endif %}
+</br>
+{% if admin %}
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">全部信息</a></li>
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('.excel') }}">导出Excel</a></li>
+        <!--<li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li> -->
+        {% endif %}
+    </ul>
+    {% include '_posts.html' %}
+</div>
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

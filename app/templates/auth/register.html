@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Register{% endblock %}
+
+{% block page_content %}
+<h3>班级对应关系:</h3>
+<ul>
+    <li>00：少年班</li>
+	<li>01：创新一班</li>
+	<li>02：创新三班</li>
+	<li>03：其他班级</li>
+</ul>
+<div class="page-header">
+    <h1>Register</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
