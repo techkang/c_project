@@ -47,34 +47,36 @@ def index():
         db.session.add(post)
         return redirect(url_for('.index'))'''
     if form.validate_on_submit():
-        filename=current_user.class_no+'__'+current_user.student_number+'.zip'
-        form.project.data.save('homework/'+filename)
-        post = Post(body=current_user.email+' submit his/her homework.',
-                author_id=current_user.id)
-        db.session.add(post)
-        db.session.commit()       
-        flash("your project has been submitted!")
+        file_format=form.project.data.filename[-3:]
+        if  not (file_format in ['zip','txt','pdf']):
+            flash('Wrong file type!','error')
+        else:
+            filename=current_user.class_no+'__'+current_user.student_number+'.'+file_format
+            form.project.data.save('homework/'+filename)
+            post = Post(body=current_user.email+' submit his/her homework.',
+                    author_id=current_user.id)
+            u=User.query.filter_by(id=current_user.id).first()
+            u.location="1"
+            db.session.add(u)
+            db.session.add(post)
+            db.session.commit()
+            flash("your project has been submitted!")
     else:
         filename=None
     admin=False
+    page = request.args.get('page', 1, type=int)
+    show_followed = False    
     if current_user.can(Permission.MODERATE_COMMENTS):
-        page = request.args.get('page', 1, type=int)
-        show_followed = False
-        if current_user.is_authenticated:
-            show_followed = bool(request.cookies.get('show_followed', ''))
-        if show_followed:
-            query = current_user.followed_posts
-        else:
-            query = Post.query
-        pagination = query.order_by(Post.timestamp.desc()).paginate(
-            page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
-            error_out=False)
-        posts = pagination.items
+        query = Post.query
         admin=True
     else:
-        posts=None
-        show_followed=None
-        pagination=None
+        if (current_user.is_authenticated):
+            query=Post.query.filter_by(author_id=current_user.id)
+        else:
+            query=Post.query.filter_by(id=-1)
+    pagination = query.order_by(Post.timestamp.desc()).paginate(
+            page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],error_out=False)
+    posts = pagination.items    
     return render_template('index.html', form=form, posts=posts,
                            show_followed=show_followed, pagination=pagination,admin=admin)
 
@@ -84,8 +86,8 @@ def excel():
     sheet = workbook.add_sheet('Sheet1')
     users=User.query.filter_by(role=Role.query.filter_by(name='User').first()).all()
     rowlen = len(users)
-    tag=['id','email','student number','name','province','sex','phone','about me']
-    for j in range(8):
+    tag=['id','email','student number','name','submitted']
+    for j in range(5):
         sheet.write(0, j, tag[j])
     for i in range(0,rowlen):
         user=[]
@@ -94,10 +96,7 @@ def excel():
         user.append(users[i].student_number)
         user.append(users[i].username)
         user.append(users[i].location)
-        user.append(users[i].sex)
-        user.append(users[i].phone)
-        user.append(users[i].about_me)
-        for j in range(8):
+        for j in range(5):
             sheet.write(i+1,j,user[j])
     workbook.save('student.xls')
     return redirect(url_for('.download'))

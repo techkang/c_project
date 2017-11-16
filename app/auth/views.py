@@ -53,7 +53,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(email=form.email.data,
-                    student_number=form.student_number.data,
+                    student_number=form.student_number.data.upper(),
+                    location="0",
                     class_no=form.class_no.data,
                     username=form.username.data,
                     password=form.password.data)
