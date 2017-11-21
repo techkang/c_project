@@ -43,6 +43,7 @@
         <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">全部信息</a></li>
         {% if current_user.is_authenticated %}
         <li><a href="{{ url_for('.excel') }}">导出Excel</a></li>
+        <li><a href="{{ url_for('.download_homework') }}">Download Homework</a></li>
         <!--<li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li> -->
         {% endif %}
     </ul>

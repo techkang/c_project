@@ -12,7 +12,7 @@ from ..decorators import admin_required, permission_required
 from xlwt import Workbook
 import os
 from werkzeug import secure_filename
-
+import zipfile
 
 @main.after_app_request
 def after_request(response):
@@ -109,7 +109,15 @@ def download():
     directory = os.getcwd()  # 假设在当前目录
     return send_from_directory(directory, filename, as_attachment=True)
 
-
+@main.route('/download_homework')
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def download_homework():
+    files=os.listdir('homework')
+    homework_zip=zipfile.ZipFile('homework_zip.zip','w')
+    for file in files:
+        homework_zip.write(os.path.join('homework',file),file,compress_type=zipfile.ZIP_DEFLATED)
+    return send_from_directory(os.getcwd(),'homework_zip.zip',as_attachment=True)
 
 
 @main.route('/user/<username>')
