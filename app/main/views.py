@@ -117,6 +117,7 @@ def download_homework():
     homework_zip=zipfile.ZipFile('homework_zip.zip','w')
     for file in files:
         homework_zip.write(os.path.join('homework',file),file,compress_type=zipfile.ZIP_DEFLATED)
+    homework_zip.close()
     return send_from_directory(os.getcwd(),'homework_zip.zip',as_attachment=True)
 
 
