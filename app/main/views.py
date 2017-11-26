@@ -52,15 +52,18 @@ def index():
             flash('Wrong file type!','error')
         else:
             filename=current_user.class_no+'__'+current_user.student_number+'.'+file_format
-            form.project.data.save('homework/'+filename)
-            post = Post(body=current_user.email+' submit his/her homework.',
-                    author_id=current_user.id)
-            u=User.query.filter_by(id=current_user.id).first()
-            u.location="1"
-            db.session.add(u)
-            db.session.add(post)
-            db.session.commit()
-            flash("your project has been submitted!")
+            try:
+                form.project.data.save('homework/'+filename)
+                post = Post(body=current_user.email+' submit his/her homework.',
+                        author_id=current_user.id)
+                u=User.query.filter_by(id=current_user.id).first()
+                u.location="1"
+                db.session.add(u)
+                db.session.add(post)
+                db.session.commit()
+                flash("Your project has been submitted!")
+            except:
+                flash("Submit homework failed!")
     else:
         filename=None
     admin=False
