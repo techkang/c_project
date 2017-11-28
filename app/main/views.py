@@ -51,7 +51,7 @@ def index():
         if  not (file_format in ['zip','txt','pdf']):
             flash('Wrong file type!','error')
         else:
-            filename=current_user.class_no+'__'+current_user.student_number+'.'+file_format
+            filename=current_user.class_no+'__'+current_user.student_number+'__'+form.times.data+'.'+file_format
             try:
                 form.project.data.save('homework/'+filename)
                 post = Post(body=current_user.email+' submit his/her homework.',

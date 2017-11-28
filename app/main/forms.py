@@ -15,6 +15,7 @@ class NameForm(FlaskForm):
 class HomeworkForm(FlaskForm):
     project=FileField('HomeWork',validators=[Required()])
 # FileAllowed(['.zip','.rar','.7z'],"Compressed files only")])
+    times=SelectField('project_order',choices=[('2','2'),('1_late','1'),('3','3')])
     submit = SubmitField("Submit")
 
 class EditProfileForm(FlaskForm):
