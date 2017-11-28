@@ -38,11 +38,10 @@
 <h3>欢迎提交计算机程序设计A作业，请先在右上角登录/注册</h3>
 {% endif %}
 </br>
-{% if admin: %}
 <div class="post-tabs">
     <ul class="nav nav-tabs">
         <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">全部信息</a></li>
-        {% if current_user.is_authenticated %}
+        {% if admin: %}
         <li><a href="{{ url_for('.excel') }}">导出Excel</a></li>
         <li><a href="{{ url_for('.download_homework') }}">Download Homework</a></li>
         <!--<li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li> -->
@@ -54,7 +53,6 @@
 <div class="pagination">
     {{ macros.pagination_widget(pagination, '.index') }}
 </div>
-{% endif %}
 {% endif %}
 {% endblock %}
 

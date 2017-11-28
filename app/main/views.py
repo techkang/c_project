@@ -68,14 +68,15 @@ def index():
         filename=None
     admin=False
     page = request.args.get('page', 1, type=int)
-    show_followed = False    
+    show_followed = False
+    query=Post.query    
     if current_user.can(Permission.MODERATE_COMMENTS):
-        query = Post.query
+#query = Post.query
         admin=True
     else:
-        if (current_user.is_authenticated):
-            query=Post.query.filter_by(author_id=current_user.id)
-        else:
+        if not (current_user.is_authenticated):
+#           query=Post.query.filter_by(author_id=current_user.id)
+#       else:
             query=Post.query.filter_by(id=-1)
     pagination = query.order_by(Post.timestamp.desc()).paginate(
             page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],error_out=False)
