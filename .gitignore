@@ -1,4 +1,7 @@
 *.py[cod]
+homework_1_late/*
+homework_2/*
+homework_3/*
 homework/*
 homework_zip.zip
 # C extensions
