@@ -36,6 +36,25 @@
 </div>
 {% else %}
 <h3>欢迎提交计算机程序设计A作业，请先在右上角登录/注册</h3>
+<hr>
+<div>
+	<h3>测试口令随机性</h3></br>
+	这是一个简单的程序，用来测试你口令的随机性，请输入一个口令开始测试。
+</div>
+<div class="cl-md-4">
+    {{ wtf.quick_form(crypto) }}
+</div>
+<div>
+{% if result %}
+	<h4>口令相关信息：</h4>
+	<ol>
+		<li>你的口令的随机性:{{ result[2] }}(等长随机串口令的随机性:{{ result[3] }})</li>
+		<li>你的口令相对随机性为： {{result[4]}}</li>
+		<li>破解你的口令需要尝试 {{ result[0] }} 次</li>
+		<li>天河二号破解你的口令需要: {{result[1]}} 秒</li>
+	</ol>
+{% endif %}
+</div>
 {% endif %}
 </br>
 <div class="post-tabs">
